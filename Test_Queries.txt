@@ -1,0 +1,19 @@
+5 queries valid
+
+can_travel('Cairo', 'Alex', Transports).
+can_travel('Matrouh', 'Luxor', Transports).
+can_travel('Sainai', 'Read sea', Transports).
+can_travel('Luxor', 'Aswan', Transports).
+can_travel('Port said', 'Hurgada', Transports).
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+5 queries invalid
+
+can_travel('Hurgada', 'Menofia', car).
+can_travel('Cairo', 'Menofia', plane).
+can_travel('Matrouh','Read sea',train).
+can_travel('Sainai','Port said',train).
+can_travel('Luxor','Matrouh',car).
+
+
+
