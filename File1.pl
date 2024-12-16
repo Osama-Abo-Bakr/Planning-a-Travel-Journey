@@ -1,60 +1,116 @@
-% Knowledge Base
-city('Cairo').
-city('Alexandria').
-city('Red Sea').
-city('Luxor').
-city('Aswan').
-city('Menofia').
-city('Hurghada').
-city('Matrouh').
-city('Port Said').
-city('Sinai').
+% Final project
+% Knowledge base
+place('Cairo').
+place('Alex').
+place('Read sea').
+place('Aswan').
+place('Menofia').
+place('Hurgada').
+place('Matrouh').
+place('Port said').
+place('Sainai').
+place('Luxor').
 
 transport(car).
 transport(train).
 transport(plane).
 
-% Define direct travel routes
-travel('Cairo', 'Alexandria', car).
-travel('Cairo', 'Red Sea', plane).
-travel('Cairo', 'Luxor', train).
-travel('Cairo', 'Menofia', car).
-travel('Cairo', 'Hurghada', plane).
-travel('Cairo', 'Matrouh', train).
-travel('Cairo', 'Sinai', plane).
+connection('Cairo','Alex',car).
+connection('Cairo','Read sea',plane).
+connection('Cairo','Aswan',train).
+connection('Cairo','Menofia',car).
+connection('Cairo','Hurgada',plane).
+connection('Cairo','Matrouh',train).
+connection('Cairo','Port said',plane).
+connection('Cairo','Sainai',plane).
+connection('Cairo','Luxor',train).
 
-travel('Alexandria', 'Cairo', car).
-travel('Alexandria', 'Red Sea', plane).
-travel('Alexandria', 'Luxor', plane).
-travel('Alexandria', 'Aswan', train).
-travel('Alexandria', 'Menofia', car).
-travel('Alexandria', 'Hurghada', plane).
-travel('Alexandria', 'Matrouh', train).
-travel('Alexandria', 'Port Said', plane).
-travel('Alexandria', 'Sinai', plane).
+connection('Alex','Cairo',car).
+connection('Alex','Read sea',plane).
+connection('Alex','Aswan',train).
+connection('Alex','Menofia',car).
+connection('Alex','Hurgada',plane).
+connection('Alex','Matrouh',train).
+connection('Alex','Port said',plane).
+connection('Alex','Sainai',plane).
+connection('Alex','Luxor',plane).
 
-travel('Red Sea', 'Cairo', plane).
-travel('Red Sea', 'Alexandria', plane).
-travel('Red Sea', 'Luxor', train).
-travel('Red Sea', 'Hurghada', car).
-travel('Red Sea', 'Matrouh', plane).
-travel('Red Sea', 'Sinai', car).
+connection('Read sea','Cairo',plane).
+connection('Read sea','Alex',plane).
+connection('Read sea','Aswan',train).
+connection('Read sea','Hurgada',car).
+connection('Read sea','Matrouh',plane).
+connection('Read sea','Port said',car).
+connection('Read sea','Sainai',car).
+connection('Read sea','Luxor',train).
 
-travel('Aswan', 'Cairo', train).
-travel('Aswan', 'Alexandria', train).
-travel('Aswan', 'Luxor', car).
-travel('Aswan', 'Matrouh', plane).
-travel('Aswan', 'Port Said', plane).
-travel('Aswan', 'Sinai', plane).
+connection('Aswan','Cairo',train).
+connection('Aswan','Alex',train).
+connection('Aswan','Read sea',train).
+connection('Aswan','Hurgada',train).
+connection('Aswan','Matrouh',plane).
+connection('Aswan','Port said',plane).
+connection('Aswan','Sainai',plane).
+connection('Aswan','Luxor',car).
 
+connection('Menofia','Cairo',car).
+connection('Menofia','Alex',car).
+
+connection('Hurgada','Cairo',plane).
+connection('Hurgada','Alex',plane).
+connection('Hurgada','Read sea',car).
+connection('Hurgada','Aswan',train).
+connection('Hurgada','Port said',car).
+connection('Hurgada','Sainai',car).
+connection('Hurgada','Luxor',train).
+
+connection('Matrouh','Cairo',train).
+connection('Matrouh','Alex',train).
+connection('Matrouh','Read sea',plane).
+connection('Matrouh','Aswan',plane).
+connection('Matrouh','Hurgada',plane).
+connection('Matrouh','Port said',plane).
+connection('Matrouh','Sainai',plane).
+connection('Matrouh','Luxor',plane).
+
+connection('Port said','Cairo',plane).
+connection('Port said','Alex',plane).
+connection('Port said','Read sea',car).
+connection('Port said','Aswan',plane).
+connection('Port said','Hurgada',car).
+connection('Port said','Matrouh',plane).
+connection('Port said','Sainai',car).
+connection('Port said','Luxor',plane).
+
+connection('Sainai','Cairo',plane).
+connection('Sainai','Alex',plane).
+connection('Sainai','Read sea',car).
+connection('Sainai','Aswan',plane).
+connection('Sainai','Hurgada',car).
+connection('Sainai','Matrouh',plane).
+connection('Sainai','Port said',car).
+connection('Sainai','Luxor',plane).
+
+connection('Luxor','Cairo',train).
+connection('Luxor','Alex',plane).
+connection('Luxor','Read sea',train).
+connection('Luxor','Aswan',car).
+connection('Luxor','Hurgada',train).
+connection('Luxor','Matrouh',plane).
+connection('Luxor','Port said',plane).
+connection('Luxor','Sainai',plane).
+
+% Rules for direct travel
 can_travel_directly(Start, End, Transport) :-
-    travel(Start, End, Transport).
+    connection(Start, End, Transport).
 
+% Rules for indirect travel
 can_travel_indirectly(Start, End, Transports) :-
-    travel(Start, Intermediate, Transport1),
+    connection(Start, Intermediate, Transport1),
     can_travel_directly(Intermediate, End, Transport2),
-    Transports = [Transport1, Intermediate, Transport2].
+    Transports = [Transport1,Intermediate, Transport2].
 
+% Predicate to check if it is possible to travel between two places (direct or indirect)
 can_travel(Start, End, Transports) :-
     can_travel_directly(Start, End, Transports),
     writeln('Direct connection available!'),
@@ -63,8 +119,9 @@ can_travel(Start, End, Transports) :-
 can_travel(Start, End, Transports) :-
     can_travel_indirectly(Start, End, Transports),
     writeln('Indirect connection available!'),
-    writeln(Transports).
+    writeln( Transports).
 
+% Predicate to check if an operation is compliant with the database
 is_compliant(Operation) :-
     call(Operation), !, write('Operation is compliant.'), nl.
 is_compliant(_) :-
